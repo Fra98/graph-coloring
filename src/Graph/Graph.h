@@ -11,11 +11,13 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <iterator>
 
 #include "../Vertex/Vertex.h"
+#include "../Colors/Colors.h"
+#include "../Utils.h"
 
 class Graph {
-private:
     std::vector<Vertex> _vertices;
     int V;
     int E;
@@ -24,6 +26,8 @@ public:
     Graph(int V, int E);
 
     void addEdge(int v1, int v2);
+
+    void coloringSeqGreedy();
 };
 
 std::unique_ptr<Graph> loadGraph(const std::string &fileName);

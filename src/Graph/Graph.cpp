@@ -14,6 +14,30 @@ void Graph::addEdge(int v1, int v2) {
     _vertices[v1-1].addEdge(v2);
 }
 
+void Graph::coloringSeqGreedy() {
+    std::vector<int> idx = randomPermutation(V);
+
+    for(int i=0; i<V;  i++) {
+        Colors C;
+        Vertex &v = _vertices[idx[i]-1];
+        auto adjL = v.getAdjL();
+
+        // C = { colors of all colored neighbors of v }
+        for(int j : *adjL) {
+            int cj = _vertices[j-1].getColor();
+            if(cj != UNCOLORED)
+                C.addColor(cj);
+        }
+
+        // Smallest color not in C
+        int minCol = C.findMinCol();
+        if(minCol == COLS_FULL)
+            exit(-2);
+
+        v.setColor(minCol);
+    }
+}
+
 std::unique_ptr<Graph> loadGraph(const std::string &fileName) {
     std::ifstream fin {fileName};
     std::string line;

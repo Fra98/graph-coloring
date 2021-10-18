@@ -7,6 +7,7 @@ using namespace std;
 int main() {
     unique_ptr<Graph> G = loadGraph("../assets/test.graph");
 
+    G->coloringSeqGreedy();
 
     return 0;
 }
