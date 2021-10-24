@@ -10,32 +10,35 @@ Graph::Graph(int V, int E) : V(V), E(E) {
         _vertices.emplace_back(Vertex{i+1});
 }
 
+int Graph::getV() const {
+    return V;
+}
+
+int Graph::getE() const {
+    return E;
+}
+
 void Graph::addEdge(int v1, int v2) {
     _vertices[v1-1].addEdge(v2);
 }
 
-void Graph::coloringSeqGreedy() {
-    std::vector<int> idx = randomPermutation(V);
+bool Graph::isColored() {
+    for(int i=0; i<V; i++) {
+        Vertex &v = _vertices[i];
 
-    for(int i=0; i<V;  i++) {
-        Colors C;
-        Vertex &v = _vertices[idx[i]-1];
+        int v_col = v.getColor();
+        if(v_col == UNCOLORED)
+            return false;
+
         auto adjL = v.getAdjL();
-
-        // C = { colors of all colored neighbors of v }
         for(int j : *adjL) {
-            int cj = _vertices[j-1].getColor();
-            if(cj != UNCOLORED)
-                C.addColor(cj);
+            int v2_col = _vertices[j - 1].getColor();
+            if (v2_col == v_col || v2_col == UNCOLORED)
+                return false;
         }
-
-        // Smallest color not in C
-        int minCol = C.findMinCol();
-        if(minCol == COLS_FULL)
-            exit(-2);
-
-        v.setColor(minCol);
     }
+
+    return true;
 }
 
 std::unique_ptr<Graph> loadGraph(const std::string &fileName) {

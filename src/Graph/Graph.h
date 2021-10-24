@@ -15,7 +15,7 @@
 
 #include "../Vertex/Vertex.h"
 #include "../Colors/Colors.h"
-#include "../Utils.h"
+#include "../Utils/Utils.h"
 
 class Graph {
     std::vector<Vertex> _vertices;
@@ -27,6 +27,13 @@ public:
 
     void addEdge(int v1, int v2);
 
+    bool isColored();
+
+    [[nodiscard]] int getV() const;
+
+    [[nodiscard]] int getE() const;
+
+    // COLORING ALGORITHMS
     void coloringSeqGreedy();
 };
 

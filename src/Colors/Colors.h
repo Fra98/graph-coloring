@@ -6,19 +6,24 @@
 #define SRC_COLORS_H
 
 #include <vector>
+#include <iostream>
 
-#define MAX_SIZE 32
-#define COLS_FULL 1000
+#define DEFAULT_SIZE 32
+#define COLS_FULL -1
 
 class Colors {
-public:
     std::vector<bool> colors;
 
+public:
     Colors();
+
+    explicit Colors(int size);
 
     int findMinCol();
 
     void addColor(int col);
+
+    int resizeColors();
 };
 
 #endif //SRC_COLORS_H

@@ -9,5 +9,10 @@ int main() {
 
     G->coloringSeqGreedy();
 
+    if(G->isColored())
+        cout << "Correct Coloring! " << endl;
+    else
+        cout << "Incorrect Coloring! " << endl;
+
     return 0;
 }
