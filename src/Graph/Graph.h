@@ -32,17 +32,16 @@ public:
     [[nodiscard]] unsigned int getV() const;
 
     [[nodiscard]] unsigned int getE() const;
-
-    bool isColored();
-
-    bool isMIS(const boost::dynamic_bitset<> &vMap);
-
+    
     // COLORING ALGORITHMS
+    bool isColored();
     void coloringSeqGreedy();
     void coloringSeqLuby();
 
-    std::list<int> findMIS_seq(const std::vector<bool> &vMap);
-    std::list<int> findMIS_Luby(const boost::dynamic_bitset<> & vMap);
+    // MIS ALGORITHMS
+    bool isMIS(const boost::dynamic_bitset<> &vMap);
+    std::list<int> findMIS_seq(const boost::dynamic_bitset<> &vMap);
+    std::list<int> findMIS_Luby(const boost::dynamic_bitset<> &vMap);
 };
 
 std::unique_ptr<Graph> loadGraph(const std::string &fileName);

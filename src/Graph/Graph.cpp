@@ -7,7 +7,7 @@
 Graph::Graph(int V, int E) : V(V), E(E) {
     _vertices.reserve(V);
     for(int i=0; i<V; i++)
-        _vertices.emplace_back(Vertex{i+1});
+        _vertices.emplace_back(Vertex{i});
 }
 
 unsigned int Graph::getV() const {
@@ -19,7 +19,7 @@ unsigned int Graph::getE() const {
 }
 
 void Graph::addEdge(int v1, int v2) {
-    _vertices[v1-1].addEdge(v2);
+    _vertices[v1].addEdge(v2);
 }
 
 bool Graph::isColored() {
@@ -32,7 +32,7 @@ bool Graph::isColored() {
 
         auto adjL = v.getAdjL();
         for(int j : *adjL) {
-            int v2_col = _vertices[j-1].getColor();
+            int v2_col = _vertices[j].getColor();
             if (v2_col == v_col || v2_col == UNCOLORED)
                 return false;
         }
@@ -45,7 +45,7 @@ bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {
     for(int i=0; i<V; i++) {
         auto adjL = _vertices[i].getAdjL();
         for(int j : *adjL)
-            if(vMap[i] && vMap[j-1])
+            if(vMap[i] && vMap[j])
                 return false;
     }
     return true;
@@ -67,11 +67,11 @@ std::unique_ptr<Graph> loadGraph(const std::string &fileName) {
     Graph G {numV, numE};
 
     // Read vertex adjacency list line by line
-    v1 = 1;
+    v1 = 0;
     while(std::getline(fin, line)) {
         std::istringstream iss {line};
         while(iss >> v2)
-            G.addEdge(v1, v2);
+            G.addEdge(v1, v2-1);
         v1++;
     }
 

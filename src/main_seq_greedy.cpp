@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    unique_ptr<Graph> G = loadGraph("../assets/rgg_n_2_16_s0.graph");
+    unique_ptr<Graph> G = loadGraph("../assets/rgg_n_2_15_s0.graph");
 
     G->coloringSeqGreedy();
 

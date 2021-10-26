@@ -42,7 +42,7 @@ unsigned int Vertex::getDegree() const {
 unsigned int Vertex::getDegree(const boost::dynamic_bitset<> &vMap) const {
     unsigned int deg = 0;
     for(auto w : _adjL)
-        if(vMap[w-1])
+        if(vMap[w])
             deg++;
 
     return deg;
