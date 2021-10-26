@@ -10,11 +10,11 @@ Graph::Graph(int V, int E) : V(V), E(E) {
         _vertices.emplace_back(Vertex{i+1});
 }
 
-int Graph::getV() const {
+unsigned int Graph::getV() const {
     return V;
 }
 
-int Graph::getE() const {
+unsigned int Graph::getE() const {
     return E;
 }
 
@@ -32,12 +32,22 @@ bool Graph::isColored() {
 
         auto adjL = v.getAdjL();
         for(int j : *adjL) {
-            int v2_col = _vertices[j - 1].getColor();
+            int v2_col = _vertices[j-1].getColor();
             if (v2_col == v_col || v2_col == UNCOLORED)
                 return false;
         }
     }
 
+    return true;
+}
+
+bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {
+    for(int i=0; i<V; i++) {
+        auto adjL = _vertices[i].getAdjL();
+        for(int j : *adjL)
+            if(vMap[i] && vMap[j-1])
+                return false;
+    }
     return true;
 }
 

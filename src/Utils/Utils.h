@@ -10,6 +10,9 @@
 #include <algorithm>
 
 // Random permutation from 1 to N
-std::vector<int> randomPermutation(int N);
+std::vector<int> randomPermutation(unsigned int N);
+bool randomWithProb(double p);
+
+
 
 #endif //SRC_UTILS_H

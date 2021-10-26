@@ -6,6 +6,10 @@
 #define SRC_VERTEX_H
 
 #include <list>
+#include <iostream>
+#include <memory>
+#include <boost/dynamic_bitset.hpp>
+
 #include "../Colors/Colors.h"
 
 #define UNCOLORED -1
@@ -29,6 +33,10 @@ public:
     [[nodiscard]] int getWeight() const;
 
     [[nodiscard]] int getSelf() const;
+
+    [[nodiscard]] unsigned int getDegree() const;
+
+    [[nodiscard]] unsigned int getDegree(const boost::dynamic_bitset<> &vMap) const;
 
     void setColor(int color);
 

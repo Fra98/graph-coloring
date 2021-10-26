@@ -35,3 +35,16 @@ void Vertex::setWeight(int weight) {
     _weight = weight;
 }
 
+unsigned int Vertex::getDegree() const {
+    return _adjL.size();
+}
+
+unsigned int Vertex::getDegree(const boost::dynamic_bitset<> &vMap) const {
+    unsigned int deg = 0;
+    for(auto w : _adjL)
+        if(vMap[w-1])
+            deg++;
+
+    return deg;
+}
+
