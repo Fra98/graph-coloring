@@ -41,6 +41,34 @@ bool Graph::isColored() {
     return true;
 }
 
+bool Graph::isColoredPar() {
+    std::atomic_bool colored = true;
+
+    std::for_each(
+            std::execution::par_unseq,
+            _vertices.begin(),
+            _vertices.end(),
+            [this, &colored](Vertex &v) {
+                int v_col = v.getColor();
+                if(v_col == UNCOLORED) {
+                    colored.store(false);
+                    return;
+                }
+
+                auto adjL = v.getAdjL();
+                for(int j : *adjL) {
+                    int v2_col = _vertices[j].getColor();
+                    if (v2_col == v_col || v2_col == UNCOLORED) {
+                        colored.store(false);
+                        return;
+                    }
+                }
+            }
+            );
+
+    return colored;
+}
+
 bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {
     for(int i=0; i<V; i++) {
         auto adjL = _vertices[i].getAdjL();

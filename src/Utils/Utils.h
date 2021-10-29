@@ -12,6 +12,8 @@
 // Random permutation from 1 to N
 std::vector<int> randomPermutation(unsigned int N);
 bool randomWithProb(double p);
+int randomWithinRange(int a, int b);
+unsigned int findPrimeWithinRange(unsigned int a, unsigned int b);
 
 
 
