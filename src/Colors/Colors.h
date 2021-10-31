@@ -7,19 +7,20 @@
 
 #include <vector>
 #include <iostream>
+#include <boost/dynamic_bitset.hpp>
 
 #define DEFAULT_SIZE 32
 #define COLS_FULL -1
 
 class Colors {
-    std::vector<bool> colors;
+    boost::dynamic_bitset<> colors;
 
 public:
     Colors();
 
     explicit Colors(int size);
 
-    int findMinCol();
+    [[nodiscard]] int findMinCol() const;
 
     void addColor(int col);
 

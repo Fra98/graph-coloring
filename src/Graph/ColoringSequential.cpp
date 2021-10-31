@@ -10,23 +10,8 @@ void Graph::coloringSeqGreedy() {
     std::vector<int> idx = randomPermutation(V);
 
     for(int i=0; i<V; i++) {
-        Colors C;
         Vertex &v = _vertices[idx[i]-1];
-        auto adjL = v.getAdjL();
-
-        // C = { colors of all colored neighbors of v }
-        for(int j : *adjL) {
-            int cj = _vertices[j].getColor();
-            if(cj != UNCOLORED)
-                C.addColor(cj);
-        }
-
-        // Smallest color not in C
-        int minCol = C.findMinCol();
-        if(minCol == COLS_FULL)
-            minCol = C.resizeColors();
-
-        v.setColor(minCol);
+        colorVertexMinimum(v);
     }
 }
 
@@ -106,7 +91,6 @@ std::list<int> Graph::findMIS_Luby(const dynamic_bitset<> &vMap) {
 }
 
 std::list<int> Graph::findMIS_Luby2(const dynamic_bitset<> &vMap) {
-    dynamic_bitset MIS { vMap.size() };
     std::list<int> listMIS;
     dynamic_bitset vMapTmp = vMap;
 
@@ -120,7 +104,6 @@ std::list<int> Graph::findMIS_Luby2(const dynamic_bitset<> &vMap) {
             if(vMapTmp[i]) {
                 auto deg = _vertices[i].getDegree(vMapTmp);
                 if(deg == 0) {
-                    MIS[i] = true;
                     listMIS.emplace_back(i);
                     vMapTmp[i] = false;
                 }
@@ -135,10 +118,9 @@ std::list<int> Graph::findMIS_Luby2(const dynamic_bitset<> &vMap) {
         }
 
         if(max_v == -1)
-            continue;
+            break;
 
         if(max_deg >= n/16) {
-            MIS[max_v] = true;
             listMIS.emplace_back(max_v);
             vMapTmp[max_v] = false;
             auto adjL = _vertices[max_v].getAdjL();
@@ -179,7 +161,6 @@ std::list<int> Graph::findMIS_Luby2(const dynamic_bitset<> &vMap) {
             // Update MIS and temporary vMap
             for(int i=0; i<V; i++)
                 if(I[i]) {
-                    MIS[i] = true;
                     listMIS.emplace_back(i);
                     vMapTmp[i] = false;
                     auto adjL = _vertices[i].getAdjL();
@@ -204,7 +185,8 @@ void Graph::coloringSeqLuby() {
         std::list<int> x = findMIS_Luby2(vMap);
         std::cout << "MIS size: " << x.size() << std::endl;
         for(auto idx : x) {
-            _vertices[idx].setColor(tmpCol);
+            Vertex &v = _vertices[idx];
+            colorVertexMinimum(v);
             vMap[idx] = false;
         }
         tmpCol++;

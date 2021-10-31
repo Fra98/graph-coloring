@@ -22,6 +22,17 @@ void Graph::addEdge(int v1, int v2) {
     _vertices[v1].addEdge(v2);
 }
 
+unsigned int Graph::getMaxDegree() const {
+    unsigned int maxDegree = 0;
+    for(int i=0; i<V; i++) {
+        auto deg = _vertices[i].getDegree();
+        if(deg > maxDegree)
+            maxDegree = deg;
+    }
+
+    return maxDegree;
+}
+
 bool Graph::isColored() {
     for(int i=0; i<V; i++) {
         Vertex &v = _vertices[i];
@@ -41,32 +52,38 @@ bool Graph::isColored() {
     return true;
 }
 
-bool Graph::isColoredPar() {
-    std::atomic_bool colored = true;
+void Graph::colorVertexMinimum(Vertex &v) {
+    Colors C;
+    auto adjL = v.getAdjL();
 
-    std::for_each(
-            std::execution::par_unseq,
-            _vertices.begin(),
-            _vertices.end(),
-            [this, &colored](Vertex &v) {
-                int v_col = v.getColor();
-                if(v_col == UNCOLORED) {
-                    colored.store(false);
-                    return;
-                }
+    // C = { colors of all colored neighbors of v }
+    for(int j : *adjL) {
+        int cj = _vertices[j].getColor();
+        if(cj != UNCOLORED)
+            C.addColor(cj);
+    }
 
-                auto adjL = v.getAdjL();
-                for(int j : *adjL) {
-                    int v2_col = _vertices[j].getColor();
-                    if (v2_col == v_col || v2_col == UNCOLORED) {
-                        colored.store(false);
-                        return;
-                    }
-                }
-            }
-            );
+    // Smallest color not in C
+    int minCol = C.findMinCol();
+    if(minCol == COLS_FULL)
+        minCol = C.resizeColors();
 
-    return colored;
+    v.setColor(minCol);
+}
+
+int Graph::numColorsUsed() {
+    int num = 0, tmpC;
+    std::unordered_set<int> colors_table;
+
+    for(int i=0; i<V; i++) {
+        tmpC = _vertices[i].getColor();
+        if(!colors_table.count(tmpC)) {
+            colors_table.emplace(tmpC);
+            num++;
+        }
+    }
+
+    return num;
 }
 
 bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {

@@ -6,40 +6,45 @@
 
 using namespace boost;
 
-std::list<int> Graph::findMIS_LubyParallel(const dynamic_bitset<> &vMap) {
-    dynamic_bitset MIS { vMap.size() };
+std::list<int> Graph::findMIS_LubyParallel(const std::vector<char> &vMap) {
     std::list<int> listMIS;
-    dynamic_bitset vMapTmp = vMap;
+    std::vector<char> vMapTmp = vMap;
+    std::mutex _lock;
 
-    while(vMapTmp.any()) {
+    while(true) {
 //        std::cout << vMapTmp.count() << std::endl;
-        unsigned int n = 0, max_deg = 0;
-        int max_v = -1;
+        std::atomic_int n = 0, max_deg = 0, max_v = -1;
 
-        // Find a vertex with maximum degree (and add immediately to MIS vertex with deg=0)
-        for(int i=0; i<V; i++) {
-            if(vMapTmp[i]) {
-                auto deg = _vertices[i].getDegree(vMapTmp);
-                if(deg == 0) {
-                    MIS[i] = true;
-                    listMIS.emplace_back(i);
-                    vMapTmp[i] = false;
-                }
-                else {
-                    n++;
-                    if(deg > max_deg) {
-                        max_deg = deg;
-                        max_v = i;
+        std::for_each(
+                std::execution::par,
+                _vertices.begin(),
+                _vertices.end(),
+                [this, &listMIS, &vMapTmp, &n, &max_deg, &max_v, &_lock] (Vertex &v) {
+                    auto i = v.getSelf();
+                    if(vMapTmp[i]) {
+                        auto deg = _vertices[i].getDegree(vMapTmp);
+                        if(deg == 0) {
+                            std::unique_lock lg(_lock);
+                            listMIS.emplace_back(i);
+                            lg.unlock();
+                            vMapTmp[i] = false;
+                        }
+                        else {
+                            n++;
+                            if(deg > max_deg) {
+                                max_deg = static_cast<int>(deg);
+                                max_v = i;
+                            }
+                        }
                     }
                 }
-            }
-        }
+        );
 
-        if(max_v == -1)
-            continue;
+        // Check if there are remaining nodes
+        if(n == 0)
+            break;
 
         if(max_deg >= n/16) {
-            MIS[max_v] = true;
             listMIS.emplace_back(max_v);
             vMapTmp[max_v] = false;
             auto adjL = _vertices[max_v].getAdjL();
@@ -51,36 +56,54 @@ std::list<int> Graph::findMIS_LubyParallel(const dynamic_bitset<> &vMap) {
             unsigned int x = randomWithinRange(0, (int) q-1);
             unsigned int y = randomWithinRange(0, (int) q-1);
 
-            dynamic_bitset X { vMap.size() };
+            std::vector<char> X(V, false);
 
-            for(int i=0; i<V; i++) {
-                if (vMapTmp[i]) {
-                    auto deg_v = _vertices[i].getDegree(vMapTmp);
-                    if(deg_v < n/16) {
-                        auto n_v =  q / (2 * deg_v);
-                        auto l_v = (x + i*y) % q;
-                        if (l_v <= n_v)
-                            X[i] = true;
-                    }
-                }
-            }
-
-            dynamic_bitset I = X;
-            for(int i=0; i<V; i++)
-                if(X[i]) {
-                    auto adjL = _vertices[i].getAdjL();
-                    for(auto j : *adjL)
-                        if(X[j]) {
+            std::for_each(
+                    std::execution::par_unseq,
+                    _vertices.begin(),
+                    _vertices.end(),
+                    [this, &vMapTmp, &X, &n, q, x, y] (Vertex &v) {
+                        auto i = v.getSelf();
+                        if (vMapTmp[i]) {
                             auto deg_v = _vertices[i].getDegree(vMapTmp);
-                            auto deg_w = _vertices[j].getDegree(vMapTmp);
-                            deg_v <= deg_w ? I[i] = false : I[j] = false;
+                            if(deg_v < n/16) {
+                                auto n_v =  q / (2 * deg_v);
+                                auto l_v = (x + i*y) % q;
+                                if (l_v <= n_v)
+                                    X[i] = true;
+                            }
                         }
-                }
+                    }
+            );
+
+            std::vector<char> I = X;
+            std::for_each(
+                    std::execution::par,
+                    _vertices.begin(),
+                    _vertices.end(),
+                    [this, &vMapTmp, &X, &I, &_lock] (Vertex &v) {
+                        auto i = v.getSelf();
+                        if(X[i]) {
+                            auto adjL = _vertices[i].getAdjL();
+                            for(auto j : *adjL)
+                                if(X[j]) {
+                                    auto deg_v = _vertices[i].getDegree(vMapTmp);
+                                    auto deg_w = _vertices[j].getDegree(vMapTmp);
+                                    if(deg_v <= deg_w)
+                                        I[i] = false;
+                                    else {
+                                        std::lock_guard lg{_lock};
+                                        I[j] = false;
+                                    }
+                                }
+                        }
+                    }
+            );
+
 
             // Update MIS and temporary vMap
             for(int i=0; i<V; i++)
                 if(I[i]) {
-                    MIS[i] = true;
                     listMIS.emplace_back(i);
                     vMapTmp[i] = false;
                     auto adjL = _vertices[i].getAdjL();
@@ -95,13 +118,12 @@ std::list<int> Graph::findMIS_LubyParallel(const dynamic_bitset<> &vMap) {
 }
 
 void Graph::coloringParLuby() {
-    dynamic_bitset<> vMap(V);
-    vMap.set(); // all 1's
+    std::vector<char> vMap(V, true);
     unsigned int U = V;
-    int tmpCol = 0;
+    int numMis = 0;
 
     while(U > 0) {
-        std::cout << "Calculating MIS n: " << tmpCol+1 << std::endl;
+        std::cout << "Calculating MIS n: " << ++numMis << std::endl;
         std::list<int> x = findMIS_LubyParallel(vMap);
         std::cout << "MIS size: " << x.size() << std::endl;
 
@@ -109,13 +131,13 @@ void Graph::coloringParLuby() {
                 std::execution::par_unseq,
                 x.begin(),
                 x.end(),
-                [this, &vMap, tmpCol] (int idx) {
-                    _vertices[idx].setColor(tmpCol);
+                [this, &vMap] (int idx) {
+                    Vertex &v = _vertices[idx];
+                    colorVertexMinimum(v);
                     vMap[idx] = false;
                 }
-            );
+        );
 
-        tmpCol++;
         U -= x.size();
     }
 

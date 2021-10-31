@@ -48,3 +48,12 @@ unsigned int Vertex::getDegree(const boost::dynamic_bitset<> &vMap) const {
     return deg;
 }
 
+unsigned int Vertex::getDegree(const std::vector<char> &vMap) const {
+    unsigned int deg = 0;
+    for(auto w : _adjL)
+        if(vMap[w])
+            deg++;
+
+    return deg;
+}
+

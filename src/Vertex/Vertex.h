@@ -38,6 +38,8 @@ public:
 
     [[nodiscard]] unsigned int getDegree(const boost::dynamic_bitset<> &vMap) const;
 
+    [[nodiscard]] unsigned int getDegree(const std::vector<char> &vMap) const;
+
     void setColor(int color);
 
     void setWeight(int weight);

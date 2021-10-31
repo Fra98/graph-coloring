@@ -2,8 +2,8 @@
 // Created by francesco on 02/04/21.
 //
 
-#ifndef LAB1_PROJECT_DURATIONLOGGER_H
-#define LAB1_PROJECT_DURATIONLOGGER_H
+#ifndef SRC_DURATIONLOGGER_H
+#define SRC_DURATIONLOGGER_H
 
 #include <iostream>
 #include <string>
@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //LAB1_PROJECT_DURATIONLOGGER_H
+#endif //SRC_DURATIONLOGGER_H

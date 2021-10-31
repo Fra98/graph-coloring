@@ -8,11 +8,13 @@ Colors::Colors() : colors(DEFAULT_SIZE, false) {}
 
 Colors::Colors(int size) : colors(size, false) {}
 
-int Colors::findMinCol() {
-    for(int i=0; i<colors.size(); i++)
-        if(!colors[i])
-            return i;
-    return COLS_FULL;
+int Colors::findMinCol() const {
+    boost::dynamic_bitset<> temp = colors;
+    auto idx = temp.flip().find_first();
+
+    if(idx == boost::dynamic_bitset<>::npos)
+        return COLS_FULL;
+    else return static_cast<int>(idx);
 }
 
 int Colors::resizeColors() {

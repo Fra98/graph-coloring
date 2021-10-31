@@ -13,8 +13,10 @@
 #include <memory>
 #include <iterator>
 #include <algorithm>
+#include <thread>
+#include <future>
 #include <execution>
-
+#include <unordered_set>
 #include <boost/dynamic_bitset.hpp>
 
 #include "../Vertex/Vertex.h"
@@ -29,15 +31,19 @@ class Graph {
 public:
     Graph(int V, int E);
 
-    void addEdge(int v1, int v2);
-
     [[nodiscard]] unsigned int getV() const;
 
     [[nodiscard]] unsigned int getE() const;
-    
-    // COLORING ALGORITHMS
+
+    [[nodiscard]] unsigned int getMaxDegree() const;
+
+    void addEdge(int v1, int v2);
+
     bool isColored();
-    bool isColoredPar();
+    void colorVertexMinimum(Vertex &v);
+    int numColorsUsed();
+
+    // COLORING ALGORITHMS
     void coloringSeqGreedy();
     void coloringSeqLuby();
     void coloringParLuby();
@@ -47,7 +53,7 @@ public:
     std::list<int> findMIS_seq(const boost::dynamic_bitset<> &vMap);
     std::list<int> findMIS_Luby(const boost::dynamic_bitset<> &vMap);
     std::list<int> findMIS_Luby2(const boost::dynamic_bitset<> &vMap);
-    std::list<int> findMIS_LubyParallel(const boost::dynamic_bitset<> &vMap);
+    std::list<int> findMIS_LubyParallel(const std::vector<char> &vMap);
 
 };
 
