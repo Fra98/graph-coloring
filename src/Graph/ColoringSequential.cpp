@@ -9,10 +9,8 @@ using namespace boost;
 void Graph::coloringSeqGreedy() {
     std::vector<int> idx = randomPermutation(V);
 
-    for(int i=0; i<V; i++) {
-        Vertex &v = _vertices[idx[i]-1];
-        colorVertexMinimum(v);
-    }
+    for(int i=0; i<V; i++)
+        colorVertexMinimum(_vertices[idx[i]]);
 }
 
 std::list<int> Graph::findMIS_seq(const dynamic_bitset<> &vMap) {

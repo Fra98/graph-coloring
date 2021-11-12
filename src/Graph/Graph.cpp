@@ -77,7 +77,7 @@ int Graph::numColorsUsed() {
 
     for(int i=0; i<V; i++) {
         tmpC = _vertices[i].getColor();
-        if(!colors_table.count(tmpC)) {
+        if(!colors_table.count(tmpC) && tmpC != UNCOLORED) {
             colors_table.emplace(tmpC);
             num++;
         }

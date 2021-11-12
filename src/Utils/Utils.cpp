@@ -8,7 +8,7 @@
 std::vector<int> randomPermutation(unsigned int N) {
     std::vector<int> v(N);
     for (int i = 0; i < N; i++)
-        v[i] = i + 1;
+        v[i] = i;
 
     std::random_device rd;
     std::mt19937 g(rd());

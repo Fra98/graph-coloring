@@ -8,13 +8,11 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <sstream>
 
-// Random permutation from 1 to N
-std::vector<int> randomPermutation(unsigned int N);
+std::vector<int> randomPermutation(unsigned int N);             // random permutation from 0 to N-1
 bool randomWithProb(double p);
 int randomWithinRange(int a, int b);
 unsigned int findPrimeWithinRange(unsigned int a, unsigned int b);
-
-
 
 #endif //SRC_UTILS_H
