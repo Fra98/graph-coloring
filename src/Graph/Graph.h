@@ -55,7 +55,8 @@ public:
     void coloringParLuby();
     void coloringJonesPlassmann(size_t num_threads = 0);
     void asyncHeuristic(const std::vector<int> &weights, unsigned int idThread,
-                        size_t num_threads, size_t &activeThreads, size_t &running);
+                        size_t num_threads, size_t &activeThreads,
+                        size_t &startCount, size_t &endCount);
 
     // MIS ALGORITHMS
     bool isMIS(const boost::dynamic_bitset<> &vMap);

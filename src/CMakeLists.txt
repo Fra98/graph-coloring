@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS -pthread)
 
 add_executable(seq_greedy main_greedy_seq.cpp Graph/Graph.cpp Graph/Graph.h Vertex/Vertex.cpp Vertex/Vertex.h Colors/Colors.cpp Colors/Colors.h Utils/Utils.cpp Utils/Utils.h Graph/ColoringSequential.cpp)
 add_executable(seq_luby main_luby_seq.cpp Graph/Graph.cpp Graph/Graph.h Vertex/Vertex.cpp Vertex/Vertex.h Colors/Colors.cpp Colors/Colors.h Utils/Utils.cpp Utils/Utils.h Graph/ColoringSequential.cpp)
-add_executable(par_luby main_luby_par.cpp Graph/Graph.cpp Graph/Graph.h Vertex/Vertex.cpp Vertex/Vertex.h Colors/Colors.cpp Colors/Colors.h Utils/Utils.cpp Utils/Utils.h Graph/ColoringParallel.cpp)
+add_executable(par_luby main_luby_par.cpp Graph/Graph.cpp Graph/Graph.h Vertex/Vertex.cpp Vertex/Vertex.h Colors/Colors.cpp Colors/Colors.h Utils/Utils.cpp Utils/Utils.h Graph/ColoringLuby.cpp)
 add_executable(jones_plassmann main_jones_plassmann.cpp Graph/Graph.cpp Graph/Graph.h Vertex/Vertex.cpp Vertex/Vertex.h Colors/Colors.cpp Colors/Colors.h Utils/Utils.cpp Utils/Utils.h Graph/ColoringJonesPlassmann.cpp)
 
 # ONLY FOR GCC COMPILER
