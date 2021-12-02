@@ -57,6 +57,10 @@ public:
     void asyncHeuristic(const std::vector<int> &weights, unsigned int idThread,
                         size_t num_threads, size_t &activeThreads,
                         size_t &startCount, size_t &endCount);
+    void asyncHeuristicOpt(const std::vector<int> &weights, unsigned int idThread,
+                        size_t num_threads, size_t &activeThreads,
+                        size_t &startCount, size_t &endCount,
+                        bool &START, bool &END);
 
     // MIS ALGORITHMS
     bool isMIS(const boost::dynamic_bitset<> &vMap);
