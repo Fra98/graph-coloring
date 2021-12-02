@@ -35,7 +35,11 @@ void Graph::coloringJonesPlassmann(size_t num_threads) {
 void Graph::asyncHeuristic(const std::vector<int> &weights, unsigned int idThread,
                            size_t num_threads, size_t &activeThreads,
                            size_t &startCount, size_t &endCount) {
-    unsigned int toBeColored = V / num_threads + (V % num_threads > idThread);
+    unsigned int size = V / num_threads;
+    unsigned int start = idThread * size, end = idThread * size + size;
+    if(idThread+1 == num_threads)   // last thread take remaining vertices
+        end = V;
+    unsigned int toBeColored = end - start;
 
 //    std::stringstream msg;
 //    msg << "Thread Id: " << idThread << "\t toBeColored: " << toBeColored << "\n";
@@ -56,12 +60,12 @@ void Graph::asyncHeuristic(const std::vector<int> &weights, unsigned int idThrea
         ul_start.unlock();
 
         // NON-CRITICAL SECTION
-        for(auto v=idThread; v<V; v+=num_threads) {
+        for(auto v=start; v<end; v++) {
             if(_vertices[v].getColor() == UNCOLORED) {
                 auto adjL = _vertices[v].getAdjL();
                 bool isLocalMax = true;
                 for(auto w : *adjL)
-                    if(weights[w] > weights[v] && _vertices[w].getColor() == UNCOLORED) {
+                    if(_vertices[w].getColor() == UNCOLORED && weights[w] > weights[v]) {
                         isLocalMax = false;
                         break;
                     }
@@ -190,4 +194,4 @@ void Graph::asyncHeuristicOpt(const std::vector<int> &weights, unsigned int idTh
             numLoc--;
         }
 }
- */
+*/
