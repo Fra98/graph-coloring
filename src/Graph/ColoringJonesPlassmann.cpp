@@ -13,7 +13,6 @@ void Graph::coloringJonesPlassmann(size_t num_threads) {
     std::vector<int> weights = randomPermutation(V);
     std::vector<std::thread> threads;
     size_t activeThreads, startCount, endCount;
-    bool START, END;
 
     if(num_threads == 0)
         num_threads = std::thread::hardware_concurrency();

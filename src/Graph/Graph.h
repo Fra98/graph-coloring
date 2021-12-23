@@ -61,6 +61,10 @@ public:
                         size_t num_threads, size_t &activeThreads,
                         size_t &startCount, size_t &endCount,
                         bool &START, bool &END);*/
+    void coloringLDF(size_t num_threads = 0);
+    void asyncHeuristicLDF(const std::vector<int> &weights, unsigned int idThread,
+                        size_t num_threads, size_t &activeThreads,
+                        size_t &startCount, size_t &endCount);
 
     // MIS ALGORITHMS
     bool isMIS(const boost::dynamic_bitset<> &vMap);

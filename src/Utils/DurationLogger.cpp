@@ -1,16 +1,13 @@
-//
-// Created by francesco on 02/04/21.
-//
-
 #include "DurationLogger.h"
 
 DurationLogger::DurationLogger(const string &name) {
     cout << ">>>>>>>>>>>>>>> Starting " << name << endl;
     _name = name;
-    _start = clock();
+    _start = std::chrono::high_resolution_clock::now();
 }
 
 DurationLogger::~DurationLogger() {
-    double duration = (double) (clock() - _start) / CLOCKS_PER_SEC;
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration<double>(end - _start).count();
     cout << ">>>>>>>>>>>>>>> Ending " << _name << ", Duration: " << duration << endl;
 }

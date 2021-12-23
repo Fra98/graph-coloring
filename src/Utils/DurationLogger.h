@@ -7,12 +7,13 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
 
 using namespace std;
 
 class DurationLogger {
 private:
-    clock_t _start;
+    std::chrono::system_clock::time_point _start;
     string _name;
 
 public:
