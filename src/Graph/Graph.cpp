@@ -18,6 +18,14 @@ unsigned int Graph::getE() const {
     return E;
 }
 
+std::vector<Vertex> &Graph::getVertices(){
+    return _vertices;
+}
+
+Vertex &Graph::getVertex(unsigned int pos) {
+    return _vertices[pos];
+}
+
 void Graph::addEdge(int v1, int v2) {
     _vertices[v1].addEdge(v2);
 }
@@ -96,7 +104,7 @@ bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {
     return true;
 }
 
-std::unique_ptr<Graph> loadGraph(const std::string &fileName) {
+Graph loadGraph(const std::string &fileName) {
     std::ifstream fin {fileName};
     std::string line;
     int numV, numE, v1, v2;
@@ -122,7 +130,5 @@ std::unique_ptr<Graph> loadGraph(const std::string &fileName) {
 
     fin.close();
 
-    return std::make_unique<Graph>(G);
+    return G;
 }
-
-

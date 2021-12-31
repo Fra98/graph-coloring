@@ -1,15 +1,21 @@
 #include <iostream>
 
 #include "Graph/Graph.h"
+#include "Solve/JonesPlassmann.h"
+#include "Utils/DurationLogger.h"
 
 using namespace std;
 
 int main() {
-    unique_ptr<Graph> G = loadGraph("../assets/rgg_n_2_20_s0.graph");
+    Graph G = loadGraph("../assets/rgg_n_2_18_s0.graph");
 
-    G->coloringJonesPlassmann();
+    auto solver = std::make_unique<JonesPlassmann>();
+    {
+        DurationLogger dl {solver->name()};
+        solver->solve(G);
+    }
 
-    if(G->isColored())
+    if(G.isColored())
         cout << "Correct Coloring! " << endl;
     else
         cout << "Incorrect Coloring! " << endl;

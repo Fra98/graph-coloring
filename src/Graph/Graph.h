@@ -30,6 +30,7 @@
 #include "../Utils/Utils.h"
 
 class Graph {
+private:
     std::vector<Vertex> _vertices;
     unsigned int V;
     unsigned int E;
@@ -43,6 +44,10 @@ public:
 
     [[nodiscard]] unsigned int getMaxDegree() const;
 
+    std::vector<Vertex> &getVertices();
+
+    Vertex &getVertex(unsigned int pos);
+
     void addEdge(int v1, int v2);
 
     bool isColored();
@@ -53,14 +58,6 @@ public:
     void coloringSeqGreedy();
     void coloringSeqLuby();
     void coloringParLuby();
-    void coloringJonesPlassmann(size_t num_threads = 0);
-    void asyncHeuristic(const std::vector<int> &weights, unsigned int idThread,
-                        size_t num_threads, size_t &activeThreads,
-                        size_t &startCount, size_t &endCount);
-    /*void asyncHeuristicOpt(const std::vector<int> &weights, unsigned int idThread,
-                        size_t num_threads, size_t &activeThreads,
-                        size_t &startCount, size_t &endCount,
-                        bool &START, bool &END);*/
     void coloringLDF(size_t num_threads = 0);
     void asyncHeuristicLDF(const std::vector<int> &weights, unsigned int idThread,
                         size_t num_threads, size_t &activeThreads,
@@ -74,6 +71,6 @@ public:
     std::list<int> findMIS_LubyParallel(const std::vector<char> &vMap);
 };
 
-std::unique_ptr<Graph> loadGraph(const std::string &fileName);
+Graph loadGraph(const std::string &fileName);
 
 #endif //SRC_GRAPH_H

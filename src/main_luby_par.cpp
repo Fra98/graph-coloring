@@ -5,11 +5,11 @@
 using namespace std;
 
 int main() {
-    unique_ptr<Graph> G = loadGraph("../assets/rgg_n_2_20_s0.graph");
+    Graph G = loadGraph("../assets/rgg_n_2_18_s0.graph");
 
-    G->coloringParLuby();
+    G.coloringParLuby();
 
-    if(G->isColored())
+    if(G.isColored())
         cout << "Correct Coloring! " << endl;
     else
         cout << "Incorrect Coloring! " << endl;
