@@ -18,7 +18,9 @@ private:
 
 public:
     explicit DurationLogger(const string &name);
-    ~DurationLogger();
+    ~DurationLogger() = default;
+    void start();
+    void stop();
 };
 
 

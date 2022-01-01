@@ -60,6 +60,11 @@ bool Graph::isColored() {
     return true;
 }
 
+void Graph::resetColors() {
+    for(int i=0; i<V; i++)
+        _vertices[i].setColor(UNCOLORED);
+}
+
 void Graph::colorVertexMinimum(Vertex &v) {
     Colors C;
     auto adjL = v.getAdjL();
