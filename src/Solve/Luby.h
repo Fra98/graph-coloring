@@ -9,6 +9,7 @@
 
 #include "Solver.h"
 #include "../Graph/Graph.h"
+#include <mutex>
 
 class Luby : public Solver {
 

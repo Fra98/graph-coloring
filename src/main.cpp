@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     }
 
     int algorithm = std::stoi(argv[1]);
-    Graph G = loadGraph("../assets/rgg_n_2_15_s0.graph");
+    Graph G = loadGraph("../assets/v1000.gra");
     unique_ptr<Solver> solver;
 
     switch(algorithm) {

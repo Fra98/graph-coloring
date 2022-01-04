@@ -2,6 +2,7 @@
 // Created by fra on 18/10/21.
 //
 
+#include <filesystem>
 #include "Graph.h"
 
 Graph::Graph(int V, int E) : V(V), E(E) {
@@ -109,7 +110,11 @@ bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {
     return true;
 }
 
-Graph loadGraph(const std::string &fileName) {
+void Graph::setEdgeNumber(unsigned int E) {
+    this->E=E;
+}
+
+Graph loadGraph_GRAPH(const std::string &fileName) {
     std::ifstream fin {fileName};
     std::string line;
     int numV, numE, v1, v2;
@@ -134,6 +139,50 @@ Graph loadGraph(const std::string &fileName) {
     }
 
     fin.close();
-
     return G;
+}
+
+Graph loadGraph_GRA(const std::string &fileName) {
+    std::ifstream fin {fileName};
+    std::string line;
+    int numV, numE=0, v1=0, v2;
+    int delimiterPos;
+    const std::string DELIMITER = ": ";
+
+    if (!fin.is_open()) {
+        std::cout << "Could not open the file\n";
+        exit(-1);
+    }
+
+    std::getline(fin, line);
+    std::stringstream(line) >> numV;
+    Graph G {numV, numE};
+
+    int neighbour;
+    size_t pos = 0;
+    while(std::getline(fin, line)) {
+        delimiterPos = line.find(DELIMITER);
+        std::istringstream iss {line.substr(pos+2)};
+        while(iss >> v2) {
+            G.addEdge(v1, v2);
+            G.addEdge(v2, v1);
+            numE+=2;
+        }
+        v1++;
+    }
+    G.setEdgeNumber(numE);
+    fin.close();
+    return G;
+}
+
+Graph loadGraph(const std::string &fileName) {
+    //checking the extension to call the right loading function.
+    auto ext = std::filesystem::path(fileName).extension();
+    if(ext == ".gra")
+        return loadGraph_GRA(fileName);
+    else if(ext == ".graph" || ext == ".txt")
+        return loadGraph_GRAPH(fileName);
+    else
+        std::cerr << "Wrong input format" << std::endl;
+    exit(-1);
 }

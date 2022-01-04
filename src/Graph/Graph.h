@@ -28,7 +28,7 @@ private:
     unsigned int E;
 
 public:
-    Graph(int V, int E);
+    Graph(int V, int E = 0);
 
     [[nodiscard]] unsigned int getV() const;
 
@@ -41,6 +41,7 @@ public:
     Vertex &getVertex(unsigned int pos);
 
     void addEdge(int v1, int v2);
+    void setEdgeNumber(unsigned int E);
 
     // COLORING FUNCTIONS
     bool isColored();
