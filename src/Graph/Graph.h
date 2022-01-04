@@ -28,7 +28,7 @@ private:
     unsigned int E;
 
 public:
-    Graph(int V, int E = 0);
+    explicit Graph(int V, int E = 0);
 
     [[nodiscard]] unsigned int getV() const;
 
