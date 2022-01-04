@@ -146,7 +146,7 @@ Graph loadGraph_GRA(const std::string &fileName) {
     std::ifstream fin {fileName};
     std::string line;
     int numV, numE=0, v1=0, v2;
-    int delimiterPos = 0;
+    size_t delimiterPos;
     const std::string DELIMITER = ": ";
 
     if (!fin.is_open()) {
@@ -158,7 +158,6 @@ Graph loadGraph_GRA(const std::string &fileName) {
     std::stringstream(line) >> numV;
     Graph G {numV, numE};
 
-    int neighbour;
     while(std::getline(fin, line)) {
         delimiterPos = line.find(DELIMITER);
         std::istringstream iss {line.substr(delimiterPos+2)};
