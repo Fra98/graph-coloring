@@ -6,20 +6,20 @@
 #define SRC_RANGE_H
 
 class Range {
-    unsigned int _totalSize;
-    unsigned int _numSplits;
-    unsigned int _splitSize;
+    size_t _totalSize;
+    size_t _numSplits;
+    size_t _splitSize;
 
 public:
-    Range(unsigned int totalSize, unsigned int numSplits) : _totalSize(totalSize), _numSplits(numSplits) {
+    Range(size_t totalSize, size_t numSplits) : _totalSize(totalSize), _numSplits(numSplits) {
         _splitSize = totalSize / numSplits;
     };
 
-    [[nodiscard]] unsigned int getStart(int index) const {
+    [[nodiscard]] size_t getStart(unsigned int index) const {
         return index * _splitSize;
     };
 
-    [[nodiscard]] unsigned int getEnd(int index) const {
+    [[nodiscard]] size_t getEnd(unsigned int index) const {
         if(index+1 == _numSplits)       // last thread take all remaining elements
             return _totalSize;
         return (index+1) * _splitSize;

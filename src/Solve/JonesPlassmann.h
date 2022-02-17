@@ -11,6 +11,7 @@
 
 #include "Solver.h"
 #include "../Graph/Graph.h"
+#include "../Utils/Range.h"
 
 class JonesPlassmann : public Solver {
     size_t _numThreads;

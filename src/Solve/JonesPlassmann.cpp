@@ -39,11 +39,10 @@ void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, u
                                     size_t &activeThreads, size_t &startCount, size_t &endCount) {
     auto V = G.getV();
     auto& vertices = G.getVertices();
-    unsigned int size = V / _numThreads;
-    unsigned int start = idThread * size, end = idThread * size + size;
-    if(idThread+1 == _numThreads)   // last thread take remaining vertices
-        end = V;
-    unsigned int toBeColored = end - start;
+    Range rs {V, _numThreads};
+    auto start = rs.getStart(idThread);
+    auto end = rs.getEnd(idThread);
+    auto toBeColored = end - start;
 
 //    std::stringstream msg;
 //    msg << "Thread Id: " << idThread << "\t toBeColored: " << toBeColored << "\n";
