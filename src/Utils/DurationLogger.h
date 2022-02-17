@@ -17,10 +17,22 @@ private:
     string _name;
 
 public:
-    explicit DurationLogger(const string &name);
+    explicit DurationLogger(const string &name) {
+        _name = name;
+    }
+
     ~DurationLogger() = default;
-    void start();
-    void stop();
+
+    void start() {
+        cout << ">>>>>>>>>>>>>>> Starting " << _name << endl;
+        _start = std::chrono::high_resolution_clock::now();
+    }
+
+    void stop() {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration<double>(end - _start).count();
+        cout << ">>>>>>>>>>>>>>> Ending " << _name << ", Duration: " << duration << endl;
+    }
 };
 
 

@@ -16,7 +16,8 @@ int main(int argc, char **argv) {
     }
 
     int algorithm = std::stoi(argv[1]);
-    Graph G = loadGraph("../assets/DIMACS/large/cit-Patents.scc.gra");
+    // Graph G = loadGraph("../assets/DIMACS/large/cit-Patents.scc.gra");
+    Graph G = loadGraph("../assets/DIMACS10/rgg_n_2_18_s0.graph");
     unique_ptr<Solver> solver;
 
     switch(algorithm) {

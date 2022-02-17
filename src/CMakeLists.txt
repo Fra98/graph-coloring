@@ -10,7 +10,9 @@ add_executable(main
         Vertex/Vertex.cpp Vertex/Vertex.h
         Colors/Colors.cpp Colors/Colors.h
         Utils/Utils.cpp Utils/Utils.h
-        Utils/DurationLogger.cpp Utils/DurationLogger.h
+        Utils/DurationLogger.h
+        Utils/Range.h
+        Utils/ParallelForEach.hpp
         Solve/Solver.h
         Solve/Greedy.cpp Solve/Greedy.h
         Solve/Luby.cpp Solve/Luby.h
@@ -23,10 +25,5 @@ add_executable(seq_luby
         Vertex/Vertex.cpp Vertex/Vertex.h
         Colors/Colors.cpp Colors/Colors.h
         Utils/Utils.cpp Utils/Utils.h
-        Utils/DurationLogger.h Utils/DurationLogger.cpp
+        Utils/DurationLogger.h
         Graph/ColoringSeqLuby.cpp)
-
-# ONLY FOR GCC COMPILER
-find_package(TBB)
-target_link_libraries(seq_luby TBB::tbb)
-target_link_libraries(main TBB::tbb)

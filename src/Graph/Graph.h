@@ -11,6 +11,7 @@
 #include <sstream>
 #include <memory>
 #include <thread>
+#include <filesystem>
 
 // Data Structures
 #include <vector>

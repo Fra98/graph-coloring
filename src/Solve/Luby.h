@@ -5,11 +5,13 @@
 #ifndef SRC_LUBY_H
 #define SRC_LUBY_H
 
-#include <execution>
+#include <mutex>
+#include <atomic>
 
 #include "Solver.h"
 #include "../Graph/Graph.h"
-#include <mutex>
+#include "../Utils/Range.h"
+#include "../Utils/ParallelForEach.hpp"
 
 class Luby : public Solver {
 
