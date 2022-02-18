@@ -13,7 +13,7 @@ using namespace std;
 
 class DurationLogger {
 private:
-    std::chrono::system_clock::time_point _start;
+    std::chrono::steady_clock::time_point _start;
     string _name;
 
 public:
@@ -25,11 +25,11 @@ public:
 
     void start() {
         cout << ">>>>>>>>>>>>>>> Starting " << _name << endl;
-        _start = std::chrono::high_resolution_clock::now();
+        _start = std::chrono::steady_clock::now();
     }
 
     void stop() {
-        auto end = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration<double>(end - _start).count();
         cout << ">>>>>>>>>>>>>>> Ending " << _name << ", Duration: " << duration << endl;
     }
