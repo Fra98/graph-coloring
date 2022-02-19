@@ -12,7 +12,7 @@ using namespace std;
 #define NUM_ALGORITHMS 4
 
 void benchmarkColoring(Graph &G, const unique_ptr<Solver> &solver, bool reset = true) {
-    DurationLogger dl {solver->name()};
+    DurationLogger dl {solver->name() + " (threads: " + to_string(solver->getNumThreads()) + ")"};
     dl.start();
     solver->solve(G);
     dl.stop();
@@ -25,10 +25,9 @@ void benchmarkColoring(Graph &G, const unique_ptr<Solver> &solver, bool reset = 
         G.resetColors();
 }
 
-
 int main(int argc, char **argv) {
-    if(argc != 2) {
-        cerr << "Missing algorithm number: 0 (ALL), 1 (Greedy), 2 (Luby), 3 (Jones Plassmann), 4 (LDF)\n";
+    if(argc != 3) {
+        cerr << "Expected 3 arguments\n";
         return 1;
     }
 
@@ -38,18 +37,21 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-//    string filename = "../assets/DIMACS/large/go_uniprot.gra";
-    string filename = "../assets/DIMACS10/rgg_n_2_15_s0.graph";
+    int numThreads = std::stoi(argv[2]);
+
+//    string path = "../assets/DIMACS/large/cit-Patents.scc.gra";
+    string path = "../assets/DIMACS10/rgg_n_2_17_s0.graph";
+    cout << "Graph name: " << std::filesystem::path(path).filename() << endl;
 
     DurationLogger dl {"loading sequential"};
     dl.start();
-    Graph G = loadGraph(filename, false);
+    Graph G = loadGraph(path, false);
     dl.stop();
     cout << "Max degree: " << G.getMaxDegree() << endl;
 
 //    DurationLogger dl2 {"loading parallel"};
 //    dl2.start();
-//    Graph G2 = loadGraph(filename, true);
+//    Graph G2 = loadGraph(path, true);
 //    dl2.stop();
 //    cout << "Max degree: " << G2.getMaxDegree() << endl;
 
@@ -63,15 +65,15 @@ int main(int argc, char **argv) {
         benchmarkColoring(G, solver, true);
     }
     if(all or algorithm==2) {
-        solver = std::make_unique<Luby>();
+        solver = std::make_unique<Luby>(numThreads);
         benchmarkColoring(G, solver, true);
     }
     if(all or algorithm==3) {
-        solver = std::make_unique<JonesPlassmann>();
+        solver = std::make_unique<JonesPlassmann>(numThreads);
         benchmarkColoring(G, solver, true);
     }
     if(all or algorithm==4) {
-        solver = std::make_unique<LDF>();
+        solver = std::make_unique<LDF>(numThreads);
         benchmarkColoring(G, solver, true);
     }
 

@@ -28,10 +28,12 @@ public:
         _start = std::chrono::steady_clock::now();
     }
 
-    void stop() {
+    double stop() {
         auto end = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration<double>(end - _start).count();
-        cout << ">>>>>>>>>>>>>>> Ending " << _name << ", Duration: " << duration << endl;
+        cout << ">>>>>>>>>>>>>>> Ending " << _name
+            << ", Duration: " << duration << " seconds" << endl;
+        return duration;
     }
 };
 

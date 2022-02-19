@@ -14,7 +14,6 @@
 #include "../Utils/Range.h"
 
 class LDF : public Solver {
-    size_t _numThreads;
     std::mutex _m_start;
     std::mutex _m_end;
     std::condition_variable _cv_start;
@@ -24,7 +23,7 @@ class LDF : public Solver {
                         size_t &activeThreads, size_t &startCount, size_t &endCount);
 
 public:
-    explicit LDF(size_t numThreads = 0);
+    explicit LDF(int numThreads = MAX_THREADS);
 
     [[nodiscard]] std::string name() const override;
 

@@ -7,7 +7,7 @@
 class Greedy : public Solver {
 
 public:
-    explicit Greedy() = default;
+    explicit Greedy();
 
     [[nodiscard]] std::string name() const override;
 

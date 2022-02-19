@@ -4,16 +4,7 @@
 
 #include "LDF.h"
 
-LDF::LDF(size_t numThreads) {
-    auto availableThreads = std::thread::hardware_concurrency();
-    if(numThreads > availableThreads)
-        throw std::runtime_error("Hardware concurrency exceeded: you can use at most " +
-                                 std::to_string(availableThreads) + " threads");
-    if(numThreads == 0)
-        _numThreads = std::thread::hardware_concurrency();
-    else
-        _numThreads = numThreads;
-}
+LDF::LDF(int numThreads) : Solver(numThreads) {}
 
 std::string LDF::name() const{
     return "LDF";

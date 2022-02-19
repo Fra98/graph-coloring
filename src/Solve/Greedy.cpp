@@ -4,6 +4,8 @@
 
 #include "Greedy.h"
 
+Greedy::Greedy(): Solver(1) {}
+
 std::string Greedy::name() const {
     return "Greedy";
 }

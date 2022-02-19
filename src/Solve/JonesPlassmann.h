@@ -14,7 +14,6 @@
 #include "../Utils/Range.h"
 
 class JonesPlassmann : public Solver {
-    size_t _numThreads;
     std::mutex _m_start;
     std::mutex _m_end;
     std::condition_variable _cv_start;
@@ -26,7 +25,7 @@ class JonesPlassmann : public Solver {
                                   size_t &activeThreads, size_t &startCount, size_t &endCount);
 
 public:
-    explicit JonesPlassmann(size_t numThreads = 0);
+    explicit JonesPlassmann(int numThreads = MAX_THREADS);
 
     [[nodiscard]] std::string name() const override;
 

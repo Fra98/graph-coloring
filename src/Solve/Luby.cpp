@@ -4,6 +4,8 @@
 
 #include "Luby.h"
 
+Luby::Luby(int numThreads) : Solver(numThreads) {}
+
 std::string Luby::name() const {
     return "Luby";
 }

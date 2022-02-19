@@ -16,7 +16,7 @@
 class Luby : public Solver {
 
 public:
-    explicit Luby() = default;
+    explicit Luby(int numThreads = MAX_THREADS);
 
     [[nodiscard]] std::string name() const override;
 
