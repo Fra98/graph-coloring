@@ -26,7 +26,7 @@ public:
 
     void addEdge(int v2);
 
-    [[nodiscard]] std::shared_ptr<std::list<int>> getAdjL();
+    [[nodiscard]] const std::list<int> &getAdjL() const;
 
     [[nodiscard]] int getColor() const;
 

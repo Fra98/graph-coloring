@@ -11,8 +11,8 @@ void Vertex::addEdge(int v2) {
     _adjL.push_back(v2);
 }
 
-std::shared_ptr<std::list<int>> Vertex::getAdjL() {
-    return std::make_shared<std::list<int>>(_adjL);
+const std::list<int> &Vertex::getAdjL() const {
+    return _adjL;
 }
 
 int Vertex::getColor() const {

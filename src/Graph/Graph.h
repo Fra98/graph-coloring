@@ -53,12 +53,6 @@ public:
 
     // MIS ALGORITHMS
     bool isMIS(const boost::dynamic_bitset<> &vMap);
-    std::list<int> findMIS_seq(const boost::dynamic_bitset<> &vMap);
-    std::list<int> findMIS_Luby(const boost::dynamic_bitset<> &vMap);
-    std::list<int> findMIS_Luby2(const boost::dynamic_bitset<> &vMap);
-
-    // TO BE DELETED
-    void coloringSeqLuby();
 };
 
 Graph loadGraph(const std::string &fileName, bool multithreading = false);

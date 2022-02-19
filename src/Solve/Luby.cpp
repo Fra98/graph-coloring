@@ -48,8 +48,8 @@ static std::list<int> findMIS_LubyParallel(Graph &G, const std::vector<char> &vM
         if(max_deg >= n/16) {
             listMIS.emplace_back(max_v);
             vMapTmp[max_v] = false;
-            auto adjL = vertices[max_v].getAdjL();
-            for(auto j : *adjL)
+            auto& adjL = vertices[max_v].getAdjL();
+            for(auto j : adjL)
                 vMapTmp[j] = false;
         }
         else {
@@ -80,8 +80,8 @@ static std::list<int> findMIS_LubyParallel(Graph &G, const std::vector<char> &vM
                             [&vertices, &vMapTmp, &X, &I, &_lock](Vertex &v) {
                                 auto i = v.getSelf();
                                 if (X[i]) {
-                                    auto adjL = vertices[i].getAdjL();
-                                    for(auto j: *adjL)
+                                    auto& adjL = vertices[i].getAdjL();
+                                    for(auto j : adjL)
                                         if(X[j]) {
                                             auto deg_v = vertices[i].getDegree(vMapTmp);
                                             auto deg_w = vertices[j].getDegree(vMapTmp);
@@ -100,8 +100,8 @@ static std::list<int> findMIS_LubyParallel(Graph &G, const std::vector<char> &vM
                 if(I[i]) {
                     listMIS.emplace_back(i);
                     vMapTmp[i] = false;
-                    auto adjL = vertices[i].getAdjL();
-                    for(auto j : *adjL)
+                    auto& adjL = vertices[i].getAdjL();
+                    for(auto j : adjL)
                         if(vMapTmp[j])
                             vMapTmp[j] = false;
                 }

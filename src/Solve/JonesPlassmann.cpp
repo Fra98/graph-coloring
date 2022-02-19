@@ -66,9 +66,9 @@ void JonesPlassmann::asyncHeuristicNoOpt(Graph &G, const std::vector<int> &weigh
         for(auto v=start; v<end; v++) {
             Vertex& vert_v = vertices[v];
             if(vert_v.getColor() == UNCOLORED) {
-                auto adjL = vert_v.getAdjL();
+                auto& adjL = vert_v.getAdjL();
                 bool isLocalMax = true;
-                for(auto w : *adjL)
+                for(auto w : adjL)
                     if(vertices[w].getColor() == UNCOLORED && weights[w] > weights[v]) {
                         isLocalMax = false;
                         break;
@@ -113,9 +113,9 @@ void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, u
     std::vector<char> vSep(V), vLoc(V);
 
     for (auto v=start; v<end; v++) {
-        auto adjL = vertices[v].getAdjL();
+        auto& adjL = vertices[v].getAdjL();
         bool local = true;
-        for (auto w: *adjL)
+        for(auto w : adjL)
             if(w < start || w >= end) {
                 local = false;
                 break;
@@ -153,9 +153,9 @@ void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, u
         for (auto v = start; v < end && numSep > 0; v++) {
             Vertex& vert_v = vertices[v];
             if (vSep[v] && vert_v.getColor() == UNCOLORED) {
-                auto adjL = vert_v.getAdjL();
+                auto& adjL = vert_v.getAdjL();
                 bool isLocalMax = true;
-                for (auto w: *adjL)
+                for(auto w : adjL)
                     if(w < start || w >= end)
                         if(vertices[w].getColor() == UNCOLORED && weights[w] > weights[v]) {
                             isLocalMax = false;

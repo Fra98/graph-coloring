@@ -66,10 +66,10 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
         for(auto v=start; v<end; v++) {
             Vertex& vert_v = vertices[v];
             if(vert_v.getColor() == UNCOLORED) {
-                auto adjL = vert_v.getAdjL();
+                auto& adjL = vert_v.getAdjL();
                 auto v_degree = vert_v.getDegree();
                 bool isLocalMax = true;
-                for(auto w : *adjL) {
+                for(auto w : adjL) {
                     auto w_degree = vertices[w].getDegree();
                     if(vertices[w].getColor() == UNCOLORED)
                         if((w_degree > v_degree || (w_degree == v_degree && weights[w] > weights[v]))) {
