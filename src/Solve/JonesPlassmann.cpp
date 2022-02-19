@@ -35,7 +35,7 @@ void JonesPlassmann::solve(Graph & G) {
 }
 
 // Asynchronous parallel coloring heuristic
-void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int idThread,
+void JonesPlassmann::asyncHeuristicNoOpt(Graph &G, const std::vector<int> &weights, unsigned int idThread,
                                     size_t &activeThreads, size_t &startCount, size_t &endCount) {
     auto V = G.getV();
     auto& vertices = G.getVertices();
@@ -100,25 +100,23 @@ void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, u
 
 
 //Asynchronous parallel coloring heuristic
-void JonesPlassmann::asyncHeuristicUselessOpt(Graph &G, const std::vector<int> &weights, unsigned int idThread,
+void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int idThread,
                                        size_t &activeThreads, size_t &startCount, size_t &endCount) {
     auto V = G.getV();
     auto& vertices = G.getVertices();
-    std::vector<char> vSep, vLoc;
-    int numLoc = 0, numSep = 0;
-    unsigned int size = V / _numThreads;
-    unsigned int start = idThread * size, end = idThread * size + size;
-    if(idThread+1 == _numThreads)   // last thread take remaining vertices
-        end = V;
+    Range rs {V, _numThreads};
+    auto start = rs.getStart(idThread);
+    auto end = rs.getEnd(idThread);
 
     // Determine Separator and Local Vertices
-    vSep.reserve(V);
-    vLoc.reserve(V);
+    int numLoc = 0, numSep = 0;
+    std::vector<char> vSep(V), vLoc(V);
+
     for (auto v=start; v<end; v++) {
         auto adjL = vertices[v].getAdjL();
         bool local = true;
         for (auto w: *adjL)
-            if (w >= start &&  w < end) {
+            if(w < start || w >= end) {
                 local = false;
                 break;
             }
@@ -132,9 +130,9 @@ void JonesPlassmann::asyncHeuristicUselessOpt(Graph &G, const std::vector<int> &
         }
     }
 
-    std::stringstream msg;
-    msg << "Thread Id: " << idThread << "\t NumSep: " << numSep <<  "\t NumLoc: " << numLoc << "\n";
-    std::cout << msg.str();
+//    std::stringstream msg;
+//    msg << "Thread Id: " << idThread << "\t NumSep: " << numSep <<  "\t NumLoc: " << numLoc << "\n";
+//    std::cout << msg.str();
 
     // COLORING Separator vertices
 //    int loop = 0;
@@ -158,10 +156,11 @@ void JonesPlassmann::asyncHeuristicUselessOpt(Graph &G, const std::vector<int> &
                 auto adjL = vert_v.getAdjL();
                 bool isLocalMax = true;
                 for (auto w: *adjL)
-                    if(vertices[w].getColor() == UNCOLORED && weights[w] > weights[v]) {
-                        isLocalMax = false;
-                        break;
-                    }
+                    if(w < start || w >= end)
+                        if(vertices[w].getColor() == UNCOLORED && weights[w] > weights[v]) {
+                            isLocalMax = false;
+                            break;
+                        }
                 if (isLocalMax) {
                     G.colorVertexMinimum(vert_v);
                     numSep--;

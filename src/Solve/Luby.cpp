@@ -121,14 +121,14 @@ void Luby::solve(Graph &G) {
 //    numThreads = 4;
 
     while(U > 0) {
-        std::cout << "Calculating MIS n: " << ++numMis << std::endl;
+        // std::cout << "Calculating MIS n: " << ++numMis << std::endl;
         std::list<int> listMis = findMIS_LubyParallel(G, vMap, numThreads);
 
         // Converting mis list to array
         std::vector<int> mis;
         mis.reserve(listMis.size());
         mis.assign(listMis.begin(), listMis.end());
-        std::cout << "MIS size: " << mis.size() << std::endl;
+        // std::cout << "MIS size: " << mis.size() << std::endl;
 
         parallelForEach(numThreads, mis, [color, &vertices, &vMap](int idx) {
             Vertex &v = vertices[idx];
