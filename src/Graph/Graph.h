@@ -21,6 +21,7 @@
 #include "../Vertex/Vertex.h"
 #include "../Colors/Colors.h"
 #include "../Utils/Utils.h"
+#include "../Utils/Jobs.hpp"
 
 class Graph {
 private:
@@ -60,6 +61,6 @@ public:
     void coloringSeqLuby();
 };
 
-Graph loadGraph(const std::string &fileName);
+Graph loadGraph(const std::string &fileName, bool multithreading = false);
 
 #endif //SRC_GRAPH_H
