@@ -11,7 +11,7 @@ void Vertex::addEdge(int v2) {
     _adjL.push_back(v2);
 }
 
-const std::list<int> &Vertex::getAdjL() const {
+const std::vector<int> &Vertex::getAdjL() const {
     return _adjL;
 }
 

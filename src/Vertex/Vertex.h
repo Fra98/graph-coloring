@@ -16,7 +16,7 @@
 #define UNWEIGHTED -1
 
 class Vertex {
-    std::list<int> _adjL;
+    std::vector<int> _adjL;
     int _self;
     int _color;
     int _weight;
@@ -26,7 +26,7 @@ public:
 
     void addEdge(int v2);
 
-    [[nodiscard]] const std::list<int> &getAdjL() const;
+    [[nodiscard]] const std::vector<int> &getAdjL() const;
 
     [[nodiscard]] int getColor() const;
 
