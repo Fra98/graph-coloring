@@ -33,44 +33,67 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
     Range rs {V, _numThreads};
     auto start = rs.getStart(idThread);
     auto end = rs.getEnd(idThread);
-    auto toBeColored = end - start;
+
+    // Determine Separator and Local Vertices
+    int numLoc = 0, numSep = 0;
+    std::vector<char> vSep(V), vLoc(V);
+
+    for (auto v=start; v<end; v++) {
+        auto& adjL = vertices[v].getAdjL();
+        bool local = true;
+        for(auto w : adjL)
+            if(w < start || w >= end) {
+                local = false;
+                break;
+            }
+        if(local) {
+            vLoc[v] = true;
+            numLoc++;
+        }
+        else {
+            vSep[v] = true;
+            numSep++;
+        }
+    }
 
 //    std::stringstream msg;
-//    msg << "Thread Id: " << idThread << "\t toBeColored: " << toBeColored << "\n";
+//    msg << "Thread Id: " << idThread << "\t NumSep: " << numSep <<  "\t NumLoc: " << numLoc << "\n";
 //    std::cout << msg.str();
 
+    // COLORING Separator vertices
 //    int loop = 0;
-    while(toBeColored > 0) {
+    while(numSep > 0) {
 //        loop++;
         std::unique_lock ul_start(_m_start);
         startCount++;
-        if(startCount == activeThreads)
+        if (startCount == activeThreads)
             _cv_start.notify_all();
         else
             _cv_start.wait(ul_start);
-
         startCount--;
+
 //        std::cout << "Thread Id: " << idThread << "\t ENTERED -> LOOP: " << loop << "\t startCount: " << startCount << '\n';
         ul_start.unlock();
 
         // NON-CRITICAL SECTION
-        for(auto v=start; v<end; v++) {
+        for (auto v = start; v < end && numSep > 0; v++) {
             Vertex& vert_v = vertices[v];
-            if(vert_v.getColor() == UNCOLORED) {
+            if (vSep[v] && vert_v.getColor() == UNCOLORED) {
                 auto& adjL = vert_v.getAdjL();
                 auto v_degree = vert_v.getDegree();
                 bool isLocalMax = true;
                 for(auto w : adjL) {
-                    auto w_degree = vertices[w].getDegree();
-                    if(vertices[w].getColor() == UNCOLORED)
-                        if((w_degree > v_degree || (w_degree == v_degree && weights[w] > weights[v]))) {
+                    if ((vertices[w].getColor() == UNCOLORED) && (w < start || w >= end)) {
+                        auto w_degree = vertices[w].getDegree();
+                        if ((w_degree > v_degree || (w_degree == v_degree && weights[w] > weights[v]))) {
                             isLocalMax = false;
                             break;
                         }
+                    }
                 }
                 if(isLocalMax) {
                     G.colorVertexMinimum(vert_v);
-                    toBeColored--;
+                    numSep--;
                 }
             }
         }
@@ -78,16 +101,20 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
 
         std::unique_lock ul_end(_m_end);
         endCount++;
-        if(endCount == activeThreads)
+        if (endCount == activeThreads)
             _cv_end.notify_all();
-        else if(toBeColored > 0)          // enter in waiting only if there are uncolored vertices left
+        else if (numSep > 0)          // enter in waiting only if there are uncolored vertices left
             _cv_end.wait(ul_end);
 
-        if(toBeColored == 0)
+        if (numSep == 0)
             activeThreads--;
         endCount--;
-
-//        std::cout << "Thread Id: " << idThread << "\t EXITED  -> LOOP: " << loop
-//                << "\t endCount: " << endCount << "\t toBeColored: " << toBeColored << '\n';
     }
+
+    // Color local vertices
+    for (auto v = start; v < end && numLoc > 0; v++)
+        if (vLoc[v]) {
+            G.colorVertexMinimum(vertices[v]);
+            numLoc--;
+        }
 }
