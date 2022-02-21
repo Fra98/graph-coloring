@@ -26,8 +26,8 @@ bool randomWithProb(double p) {
 }
 
 int randomWithinRange(int a, int b) {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 g(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::random_device rd;
+    std::mt19937 g(rd());
     std::uniform_int_distribution<> distrib(a, b);
 
     return distrib(g);
@@ -57,7 +57,9 @@ unsigned int findPrimeWithinRange(unsigned int a, unsigned int b) {
     return 0;   // no prime found
 }
 
-unsigned int nextHighestPowerOf2(unsigned int v) { // compute the next highest power of 2 of 32-bit v
+// From graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+// compute the next highest power of 2 of 32-bit v
+unsigned int nextHighestPowerOf2(unsigned int v) {
     v--;
     v |= v >> 1;
     v |= v >> 2;

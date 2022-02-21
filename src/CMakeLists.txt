@@ -14,6 +14,7 @@ add_executable(main
         Utils/Range.h
         Utils/ParallelForEach.hpp
         Utils/Jobs.hpp
+        Utils/Benchmark.h
         Solve/Solver.h
         Solve/Greedy.cpp Solve/Greedy.h
         Solve/Luby.cpp Solve/Luby.h
@@ -26,6 +27,7 @@ add_executable(benchmark
         Vertex/Vertex.cpp Vertex/Vertex.h
         Colors/Colors.cpp Colors/Colors.h
         Utils/Utils.cpp Utils/Utils.h
+        Utils/Benchmark.h
         Utils/DurationLogger.h
         Utils/Range.h
         Utils/ParallelForEach.hpp
