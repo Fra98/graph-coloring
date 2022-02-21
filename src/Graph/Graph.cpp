@@ -78,8 +78,6 @@ void Graph::colorVertexMinimum(Vertex &v) {
 
     // Smallest color not in C
     int minCol = C.findMinCol();
-    if(minCol == COLS_FULL)
-        minCol = C.resizeColors();
 
     v.setColor(minCol);
 }
