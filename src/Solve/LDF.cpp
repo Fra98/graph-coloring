@@ -15,11 +15,22 @@ void LDF::solve(Graph & G) {
     std::vector<std::thread> threads;
     size_t activeThreads = _numThreads, startCount = 0, endCount = 0;
 
-    threads.reserve(_numThreads);
+    std::vector<char> threadToStart(_numThreads,true);
+
+    Range rs {G.getV(), _numThreads};
+    for (int i = 0; i<_numThreads; i++) {
+        if (rs.getStart(i) == rs.getEnd(i)) {
+            threadToStart[i] = false;
+            activeThreads--;
+        }
+    }
+
+    threads.reserve(activeThreads);
     for(auto t=0; t<_numThreads; t++)
-        threads.emplace_back(std::thread(&LDF::asyncHeuristic, this, std::ref(G),
-                                         std::cref(weights), t, std::ref(activeThreads),
-                                         std::ref(startCount), std::ref(endCount)));
+        if (threadToStart[t])
+            threads.emplace_back(std::thread(&LDF::asyncHeuristic, this, std::ref(G),
+                                             std::cref(weights), t, std::ref(activeThreads),
+                                             std::ref(startCount), std::ref(endCount)));
 
     for(auto& t : threads)
         t.join();
@@ -37,6 +48,8 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
     // Determine Separator and Local Vertices
     int numLoc = 0, numSep = 0;
     std::vector<char> vSep(V), vLoc(V);
+    {std::unique_lock ul_start(_m_start);
+    std::cout << "Thread Id: " << idThread << "\t -> START: " << start << "\t END: " << end << '\n';}
 
     for (auto v=start; v<end; v++) {
         auto& adjL = vertices[v].getAdjL();

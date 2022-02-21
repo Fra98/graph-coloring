@@ -15,9 +15,20 @@ void JonesPlassmann::solve(Graph & G) {
     std::vector<std::thread> threads;
     size_t activeThreads = _numThreads, startCount = 0, endCount = 0;
 
-    threads.reserve(_numThreads);
+    std::vector<char> threadToStart(_numThreads,true);
+
+    Range rs {G.getV(), _numThreads};
+    for (int i = 0; i<_numThreads; i++) {
+        if (rs.getStart(i) == rs.getEnd(i)) {
+            threadToStart[i] = false;
+            activeThreads--;
+        }
+    }
+
+    threads.reserve(activeThreads);
     for(auto t=0; t<_numThreads; t++)
-        threads.emplace_back(std::thread(&JonesPlassmann::asyncHeuristic, this, std::ref(G),
+        if (threadToStart[t])
+            threads.emplace_back(std::thread(&JonesPlassmann::asyncHeuristic, this, std::ref(G),
                                          std::cref(weights), t, std::ref(activeThreads),
                                          std::ref(startCount), std::ref(endCount)));
 
@@ -120,6 +131,9 @@ void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, u
             numSep++;
         }
     }
+
+    {std::unique_lock ul_start(_m_start);
+    std::cout << "Thread Id: " << idThread << "\t -> START: " << start << "\t END: " << end << '\n';}
 
 //    std::stringstream msg;
 //    msg << "Thread Id: " << idThread << "\t NumSep: " << numSep <<  "\t NumLoc: " << numLoc << "\n";
