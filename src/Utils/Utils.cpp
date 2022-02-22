@@ -1,8 +1,3 @@
-//
-// Created by fra on 18/10/21.
-//
-
-#include <iostream>
 #include "Utils.h"
 
 std::vector<int> randomPermutation(unsigned int N) {

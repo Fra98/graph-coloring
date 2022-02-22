@@ -1,7 +1,3 @@
-//
-// Created by fra on 18/10/21.
-//
-
 #ifndef SRC_GRAPH_H
 #define SRC_GRAPH_H
 

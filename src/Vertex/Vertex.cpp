@@ -1,7 +1,3 @@
-//
-// Created by fra on 18/10/21.
-//
-
 #include "Vertex.h"
 
 Vertex::Vertex(int self, int color) : _self(self), _color(color) {}

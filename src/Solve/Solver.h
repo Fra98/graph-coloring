@@ -1,7 +1,3 @@
-//
-// Created by fra on 30/12/21.
-//
-
 #ifndef SRC_SOLVER_H
 #define SRC_SOLVER_H
 

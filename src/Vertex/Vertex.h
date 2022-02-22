@@ -1,7 +1,3 @@
-//
-// Created by fra on 18/10/21.
-//
-
 #ifndef SRC_VERTEX_H
 #define SRC_VERTEX_H
 

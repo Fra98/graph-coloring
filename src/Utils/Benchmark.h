@@ -1,7 +1,3 @@
-//
-// Created by fra on 21/02/22.
-//
-
 #ifndef SRC_BENCHMARK_H
 #define SRC_BENCHMARK_H
 

@@ -1,7 +1,3 @@
-//
-// Created by fra on 31/12/21.
-//
-
 #include "LDF.h"
 
 LDF::LDF(int numThreads) : Solver(numThreads) {}

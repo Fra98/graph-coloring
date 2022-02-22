@@ -1,7 +1,3 @@
-//
-// Created by fra on 31/12/21.
-//
-
 #ifndef SRC_LDF_H
 #define SRC_LDF_H
 

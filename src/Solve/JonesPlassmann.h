@@ -1,7 +1,3 @@
-//
-// Created by fra on 29/12/21.
-//
-
 #ifndef SRC_JONESPLASSMANN_H
 #define SRC_JONESPLASSMANN_H
 

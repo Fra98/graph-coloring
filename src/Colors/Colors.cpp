@@ -1,7 +1,3 @@
-//
-// Created by fra on 18/10/21.
-//
-
 #include "Colors.h"
 
 Colors::Colors() : colors(DEFAULT_SIZE, false) {}

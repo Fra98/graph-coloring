@@ -1,7 +1,3 @@
-//
-// Created by francesco on 02/04/21.
-//
-
 #ifndef SRC_DURATIONLOGGER_H
 #define SRC_DURATIONLOGGER_H
 

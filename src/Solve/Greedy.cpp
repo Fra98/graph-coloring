@@ -1,7 +1,3 @@
-//
-// Created by fra on 31/12/21.
-//
-
 #include "Greedy.h"
 
 Greedy::Greedy(): Solver(1) {}

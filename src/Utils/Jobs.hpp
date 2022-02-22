@@ -1,7 +1,3 @@
-//
-// Created by fra on 18/02/22.
-//
-
 #ifndef SRC_JOBS_HPP
 #define SRC_JOBS_HPP
 

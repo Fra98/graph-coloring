@@ -1,7 +1,3 @@
-//
-// Created by fra on 15/02/22.
-//
-
 #ifndef SRC_RANGE_H
 #define SRC_RANGE_H
 

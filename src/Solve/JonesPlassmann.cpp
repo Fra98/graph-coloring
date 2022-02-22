@@ -1,7 +1,3 @@
-//
-// Created by fra on 29/12/21.
-//
-
 #include "JonesPlassmann.h"
 
 JonesPlassmann::JonesPlassmann(int numThreads) : Solver(numThreads) {}
