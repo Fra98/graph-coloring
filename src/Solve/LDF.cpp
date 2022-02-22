@@ -48,8 +48,6 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
     // Determine Separator and Local Vertices
     int numLoc = 0, numSep = 0;
     std::vector<char> vSep(V), vLoc(V);
-    {std::unique_lock ul_start(_m_start);
-    std::cout << "Thread Id: " << idThread << "\t -> START: " << start << "\t END: " << end << '\n';}
 
     for (auto v=start; v<end; v++) {
         auto& adjL = vertices[v].getAdjL();

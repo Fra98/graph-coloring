@@ -13,24 +13,20 @@
 #include "../Colors/Colors.h"
 
 #define UNCOLORED -1
-#define UNWEIGHTED -1
 
 class Vertex {
     std::vector<int> _adjL;
     int _self;
     int _color;
-    int _weight;
 
 public:
-    explicit Vertex(int self, int color = UNCOLORED, int weight = UNWEIGHTED);
+    explicit Vertex(int self, int color = UNCOLORED);
 
     void addEdge(int v2);
 
     [[nodiscard]] const std::vector<int> &getAdjL() const;
 
     [[nodiscard]] int getColor() const;
-
-    [[nodiscard]] int getWeight() const;
 
     [[nodiscard]] int getSelf() const;
 
@@ -41,8 +37,6 @@ public:
     [[nodiscard]] unsigned int getDegree(const std::vector<char> &vMap) const;
 
     void setColor(int color);
-
-    void setWeight(int weight);
 };
 
 

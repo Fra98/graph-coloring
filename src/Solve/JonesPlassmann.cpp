@@ -7,7 +7,7 @@
 JonesPlassmann::JonesPlassmann(int numThreads) : Solver(numThreads) {}
 
 std::string JonesPlassmann::name() const{
-    return "Jones Plassmann";
+    return "JonesPlassmann";
 }
 
 void JonesPlassmann::solve(Graph & G) {
@@ -131,9 +131,6 @@ void JonesPlassmann::asyncHeuristic(Graph &G, const std::vector<int> &weights, u
             numSep++;
         }
     }
-
-    {std::unique_lock ul_start(_m_start);
-    std::cout << "Thread Id: " << idThread << "\t -> START: " << start << "\t END: " << end << '\n';}
 
 //    std::stringstream msg;
 //    msg << "Thread Id: " << idThread << "\t NumSep: " << numSep <<  "\t NumLoc: " << numLoc << "\n";
