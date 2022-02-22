@@ -1,7 +1,3 @@
-//
-// Created by fra on 31/12/21.
-//
-
 #include "Luby.h"
 
 Luby::Luby(int numThreads) : Solver(numThreads) {}
@@ -18,7 +14,6 @@ static std::list<int> findMIS_LubyParallel(Graph &G, const std::vector<char> &vM
     auto& vertices = G.getVertices();
 
     while(true) {
-//        std::cout << vMapTmp.count() << std::endl;
         std::atomic_int n = 0, max_deg = 0, max_v = -1;
 
         parallelForEach(numThreads, 
@@ -118,13 +113,12 @@ void Luby::solve(Graph &G) {
     auto& vertices = G.getVertices();
     std::vector<char> vMap(V, true);
     unsigned int U = V;
-    int numMis = 0, color = 0;
-    auto numThreads = std::thread::hardware_concurrency();
-//    numThreads = 4;
+    int color = 0;
 
+    // int numMis = 0;
     while(U > 0) {
         // std::cout << "Calculating MIS n: " << ++numMis << std::endl;
-        std::list<int> listMis = findMIS_LubyParallel(G, vMap, numThreads);
+        std::list<int> listMis = findMIS_LubyParallel(G, vMap, _numThreads);
 
         // Converting mis list to array
         std::vector<int> mis;
@@ -132,7 +126,7 @@ void Luby::solve(Graph &G) {
         mis.assign(listMis.begin(), listMis.end());
         // std::cout << "MIS size: " << mis.size() << std::endl;
 
-        parallelForEach(numThreads, mis, [color, &vertices, &vMap](int idx) {
+        parallelForEach(_numThreads, mis, [color, &vertices, &vMap](int idx) {
             Vertex &v = vertices[idx];
             v.setColor(color);
             vMap[idx] = false;
