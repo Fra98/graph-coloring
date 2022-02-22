@@ -11,7 +11,7 @@
 #define UNCOLORED -1
 
 class Vertex {
-    std::vector<int> _adjL;
+    std::vector<int> _adjV;
     int _self;
     int _color;
 
@@ -20,7 +20,7 @@ public:
 
     void addEdge(int v2);
 
-    [[nodiscard]] const std::vector<int> &getAdjL() const;
+    [[nodiscard]] const std::vector<int> &getAdjV() const;
 
     [[nodiscard]] int getColor() const;
 

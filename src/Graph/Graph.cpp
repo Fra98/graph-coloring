@@ -45,8 +45,8 @@ bool Graph::isColored() {
         if(v_col == UNCOLORED)
             return false;
 
-        auto& adjL = v.getAdjL();
-        for(auto j : adjL) {
+        auto& adjV = v.getAdjV();
+        for(auto j : adjV) {
             int v2_col = _vertices[j].getColor();
             if (v2_col == v_col || v2_col == UNCOLORED)
                 return false;
@@ -63,10 +63,10 @@ void Graph::resetColors() {
 
 void Graph::colorVertexMinimum(Vertex &v) {
     Colors C;
-    auto& adjL = v.getAdjL();
+    auto& adjV = v.getAdjV();
 
     // C = { colors of all colored neighbors of v }
-    for(auto j : adjL) {
+    for(auto j : adjV) {
         int cj = _vertices[j].getColor();
         if(cj != UNCOLORED)
             C.addColor(cj);
@@ -95,8 +95,8 @@ int Graph::numColorsUsed() {
 
 bool Graph::isMIS(const boost::dynamic_bitset<> &vMap) {
     for(int i=0; i<V; i++) {
-        auto& adjL = _vertices[i].getAdjL();
-        for(auto j : adjL)
+        auto& adjV = _vertices[i].getAdjV();
+        for(auto j : adjV)
             if(vMap[i] && vMap[j])
                 return false;
     }
