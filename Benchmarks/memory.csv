@@ -1,0 +1,14 @@
+Graph,Algorithm,NumThreads,Memory
+rgg_n_2_22_s0.graph,Greedy,1,534.7
+rgg_n_2_22_s0.graph,Luby,1,553.7
+rgg_n_2_22_s0.graph,Luby,4,554.3
+rgg_n_2_22_s0.graph,Luby,8,554.6
+rgg_n_2_22_s0.graph,Luby,16,554.2
+rgg_n_2_22_s0.graph,JonesPlassmann,1,543.0
+rgg_n_2_22_s0.graph,JonesPlassmann,4,566.7
+rgg_n_2_22_s0.graph,JonesPlassmann,8,598.9
+rgg_n_2_22_s0.graph,JonesPlassmann,16,662.8
+rgg_n_2_22_s0.graph,LDF,1,542.9
+rgg_n_2_22_s0.graph,LDF,4,566.8
+rgg_n_2_22_s0.graph,LDF,8,598.9
+rgg_n_2_22_s0.graph,LDF,16,662.9
