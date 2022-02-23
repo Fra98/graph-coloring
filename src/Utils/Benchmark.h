@@ -5,8 +5,11 @@
 #include "../Solve/Solver.h"
 #include "DurationLogger.h"
 
-#define ASSETS_DIR "../assets"
+#define ASSETS_DIR "../assets/"
+#define BENCHMARK_DIR "../../Benchmarks/"
 #define NUM_ALGORITHMS 4
+
+const std::array ALGORITHMS { "greedy", "luby", "jp", "LDF" };
 
 std::pair<double, int> benchmarkColoring(Graph &G, const unique_ptr<Solver> &solver, bool reset) {
     DurationLogger dl {solver->name() + " (threads: " + to_string(solver->getNumThreads()) + ")"};
@@ -31,6 +34,15 @@ std::string getPath(const std::string &graphName) {
             return entry.path().string();
 
     throw std::runtime_error("Graph " + graphName + " not found on assets folder");
+}
+
+std::vector<string> getAllPaths() {
+    std::vector<string> paths;
+    for(auto const& entry : std::filesystem::recursive_directory_iterator(ASSETS_DIR))
+        if(entry.is_regular_file() and (entry.path().extension() == ".gra" or entry.path().extension() == ".graph"))
+            paths.emplace_back(entry.path().string());
+
+    return paths;
 }
 
 // CSV UTILS
