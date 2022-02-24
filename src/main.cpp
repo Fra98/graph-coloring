@@ -67,7 +67,7 @@ void parseArguments(const std::vector<std::string> &args, std::string &algo, std
     if(opt)
         outFile = std::string(BENCHMARK_DIR) + opt.value();
     else
-        outFile = std::string(BENCHMARK_DIR) + "results.csv";  // default
+        outFile = std::string(BENCHMARK_DIR) + "benchmarks.csv";  // default
 }
 
 

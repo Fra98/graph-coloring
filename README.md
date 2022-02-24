@@ -1,6 +1,6 @@
 # Parallel Graph Coloring
 
-This project implements differents well-known [graph coloring](https://en.wikipedia.org/wiki/Graph_coloring) algorithms, specifically vertex coloring.
+This project implements different well-known [graph coloring](https://en.wikipedia.org/wiki/Graph_coloring) algorithms, specifically vertex coloring.
 
 Sequential algorithms:
 - Greedy [[Wiki]](https://en.wikipedia.org/wiki/Graph_coloring#Greedy_coloring)
