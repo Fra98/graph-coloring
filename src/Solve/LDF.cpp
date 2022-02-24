@@ -63,14 +63,8 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
         }
     }
 
-//    std::stringstream msg;
-//    msg << "Thread Id: " << idThread << "\t NumSep: " << numSep <<  "\t NumLoc: " << numLoc << "\n";
-//    std::cout << msg.str();
-
     // COLORING Separator vertices
-//    int loop = 0;
     while(numSep > 0) {
-//        loop++;
         std::unique_lock ul_start(_m_start);
         startCount++;
         if (startCount == activeThreads)
@@ -78,8 +72,6 @@ void LDF::asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int
         else
             _cv_start.wait(ul_start);
         startCount--;
-
-//        std::cout << "Thread Id: " << idThread << "\t ENTERED -> LOOP: " << loop << "\t startCount: " << startCount << '\n';
         ul_start.unlock();
 
         // NON-CRITICAL SECTION

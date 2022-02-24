@@ -32,7 +32,7 @@ cd ../..
 
 ```
 cd src/build
-./main [--help | -h] [--algo ALGO] [--graph GRAPH] [--threads THREADS] [--out OUT]`
+./main [--help | -h] [--algo ALGO] [--graph GRAPH] [--threads THREADS] [--out OUT]
 ```
 
 All the following arguments are OPTIONAL:

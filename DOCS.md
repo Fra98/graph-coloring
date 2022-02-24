@@ -160,19 +160,12 @@ All tests were performed on Linux platform (Ubuntu 21.10 operating system). The 
 
 The tests were executed on datasets of various kinds, but we will show only the results referring to the rgg graphs, since they have a similar topology and so they allow a better comparison.
 
-In `benchmark.csv` and` memory.csv` files, we reported the results for what concerns the total number of colors used, the total time in seconds used to color the graph, the overall time for loading the graph and the memory occupied by the program for the graph `rgg_n_2_22_s0.graph`
-
-|    | Graph               |     V |      E |   MaxDegree | Algorithm      |   NumThreads |   LoadTime |   ColoringTime |   NumColorsUsed |
-|---:|:--------------------|------:|-------:|------------:|:---------------|-------------:|-----------:|---------------:|----------------:|
-|  0 | rgg_n_2_15_s0.graph | 32768 | 160240 |          24 | Greedy         |            1 |   0.055024 |       0.025687 |              15 |
-|  1 | rgg_n_2_15_s0.graph | 32768 | 160240 |          24 | Luby           |            2 |   0.055024 |       0.163748 |              14 |
-|  2 | rgg_n_2_15_s0.graph | 32768 | 160240 |          24 | JonesPlassmann |            2 |   0.055024 |       0.016391 |              13 |
-|  3 | rgg_n_2_15_s0.graph | 32768 | 160240 |          24 | LDF            |            2 |   0.055024 |       0.017245 |              13 |
+In `benchmark.csv` and `memory.csv` files, we reported the results for what concerns the total number of colors used, the total time in seconds used to color the graph, the overall time for loading the graph and the memory occupied by the program for the graph `rgg_n_2_22_s0.graph`
 
 ## Number of Colors per algorithm
 
 We confirm empirically that LDF and Jones Plassmann are the best solvers in term of total number of color used. 
-We noticed that the number of colors may change sligthly for the same algorithm when we use different number of threads.
+We noticed that the number of colors may change slightly for the same algorithm when we use different number of threads.
 
 The table below shows the number of average colors used for coloring the graph, depending on the number of threads (1, 2, 4, 8, 12 and 16)
 
@@ -201,7 +194,7 @@ Through these tests, we would like to verify which algorithms allow a faster col
 
 This test was performed on the graph `rgg_n_2_24_s0.graph` (16.8 million vertices).
 The results of tests with 2, 4, 8, 12 and 16 threads for different algorithms have been reported.
-As we can see, the fastest (and better scaling than threads) algorithms are Jonh Plassmann and LDF:
+As we can see, the fastest (and better scaling than threads) algorithms are John Plassmann and LDF:
 in fact they manage to color 16.8 million vertices in about 3 seconds with 16 threads.
 
 ![](./plots/alg_vs_thread.png)
@@ -256,7 +249,7 @@ As expected, JonesPlassmann and LDF have very similar performances.
 
 ![](./plots/alg_vs_memory.png)
 
-# Conclusions
 
-The choice of algorithm results in vastly different performances. Early multithread algorithms found in literature may perform significantly worse than simpler single-thread ones, and thus be only of theoretical interest; more recent ones typically provide a measurable speedup. Simple heuristics like FVF and SDL can outperform such algorithms, as they rarely miscolor the graph and such errors can be corrected quickly.
+# Conclusions
+
 

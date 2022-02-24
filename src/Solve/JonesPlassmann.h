@@ -17,8 +17,6 @@ class JonesPlassmann : public Solver {
 
     void asyncHeuristic(Graph &G, const std::vector<int> &weights, unsigned int idThread,
                         size_t &activeThreads, size_t &startCount, size_t &endCount);
-    void asyncHeuristicNoOpt(Graph &G, const std::vector<int> &weights, unsigned int idThread,
-                                  size_t &activeThreads, size_t &startCount, size_t &endCount);
 
 public:
     explicit JonesPlassmann(int numThreads = MAX_THREADS);
