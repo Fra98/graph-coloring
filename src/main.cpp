@@ -1,53 +1,120 @@
 #include <iostream>
+#include <memory>
 
-#include "Graph/Graph.h"
 #include "Utils/DurationLogger.h"
 #include "Utils/Benchmark.h"
+#include "Graph/Graph.h"
 #include "Solve/Greedy.h"
 #include "Solve/Luby.h"
 #include "Solve/JonesPlassmann.h"
 #include "Solve/LDF.h"
 
-using namespace std;
+const char* usage = "Usage: main [--help | -h] [--algo ALGO] [--graph GRAPH] [--threads THREADS] [--out OUT]\n\n"
+                    "OPTIONALS arguments:\n"
+                    "\t--help             Show help menu\n"
+                    "\t--algo ALGO        Coloring algorithm. Choices: greedy, luby, jp, LDF (default: all)\n"
+                    "\t--graph GRAPH      Name of the graph (default: all graphs in the assets folder)\n"
+                    "\t--threads THREADS  Number of threads used in parallel algorithms (default: [2,4,8,12,MAX] if available)\n"
+                    "\t--out OUT          Name of the output file (default: benchmarks.csv)\n";
+
+std::optional<std::string> getCmdOption(const std::vector<std::string> &args, const std::string &option) {
+    auto itr = std::find(args.begin(), args.end(), option);
+    if (itr != args.end() && ++itr != args.end())
+        return *itr;
+    return std::nullopt;
+}
+
+bool hasOption(const std::vector<std::string> &args, const std::string &option) {
+    return std::find(args.begin(), args.end(), option) != args.end();
+}
+
+void parseArguments(const std::vector<std::string> &args, std::string &algo, std::vector<string> &paths,
+                    std::vector<int> &vetNumThreads, std::string &outFile) {
+    std::optional<string> opt;
+
+    if(hasOption(args, "--help") || hasOption(args, "-h")) {
+        std::cout << usage << std::endl;
+        std::exit(0);
+    }
+
+    opt = getCmdOption(args, "--algo");
+    if(opt) {
+        if(std::find(ALGORITHMS.begin(), ALGORITHMS.end(), opt.value()) != ALGORITHMS.end())
+            algo = { opt.value() };
+        else
+            throw std::runtime_error("Invalid coloring algorithm. Choices: greedy, luby, jp, LDF");
+    }
+    else
+        algo = "all";   // default
+
+    opt = getCmdOption(args, "--graph");
+    if(opt)
+        paths = { getPath(opt.value()) };
+    else
+        paths = getAllPaths();  // default
+
+    opt = getCmdOption(args, "--threads");
+    if(opt) {
+        int numThreads = { std::stoi(opt.value()) };
+        if(numThreads > std::thread::hardware_concurrency())
+            throw std::runtime_error("Hardware concurrency exceeded");
+        vetNumThreads = { numThreads };
+    }
+    else
+        vetNumThreads = { 2, 4, 8, 12, MAX_THREADS };  // default
+
+    opt = getCmdOption(args, "--out");
+    if(opt)
+        outFile = std::string(BENCHMARK_DIR) + opt.value();
+    else
+        outFile = std::string(BENCHMARK_DIR) + "results.csv";  // default
+}
+
 
 int main(int argc, char **argv) {
-    if(argc != 3) {
-        cerr << "Expected 3 arguments\n";
-        return 1;
-    }
+    std::vector<std::string> args(argv, argv + argc);
+    std::string algo, outPath;
+    std::vector<string> paths;
+    std::vector<int> vetNumThreads;
 
-    int algorithm = std::stoi(argv[1]);
-    if(algorithm > NUM_ALGORITHMS or algorithm < 0) {
-        cerr << "Invalid algorithm number: 0 (all), 1 (greedy), 2 (Luby), 3 (Jones Plassmann), 4 (LDF)\n";
-        return 2;
-    }
-
-    int numThreads = std::stoi(argv[2]);
-    bool all = (algorithm == 0);
+    parseArguments(args, algo, paths, vetNumThreads, outPath);
 
     std::vector<unique_ptr<Solver>> solvers;
-    if(all or algorithm==1)
+    if(algo == "all" || algo == "greedy")
         solvers.emplace_back(std::make_unique<Greedy>());
-    if(all or algorithm==2)
-        solvers.emplace_back(std::make_unique<Luby>(numThreads));
-    if(all or algorithm==3)
-        solvers.emplace_back(std::make_unique<JonesPlassmann>(numThreads));
-    if(all or algorithm==4)
-        solvers.emplace_back(std::make_unique<LDF>(numThreads));
+    for(auto numThreads: vetNumThreads) {
+        if(numThreads > int(std::thread::hardware_concurrency()))
+            continue;
+        if(algo == "all" || algo == "luby")
+            solvers.emplace_back(std::make_unique<Luby>(numThreads));
+        if(algo == "all" || algo == "jp")
+            solvers.emplace_back(std::make_unique<JonesPlassmann>(numThreads));
+        if(algo == "all" || algo == "LDF")
+            solvers.emplace_back(std::make_unique<LDF>(numThreads));
+    }
 
-//    string graphName = "cit-Patents.scc.gra";
-    string graphName = "rgg_n_2_17_s0.graph";
+    FILE *out = fopen(outPath.c_str(), "w");
+    if(out == nullptr)  std::exit(1);
 
-    DurationLogger dl {"loading sequential"};
-    dl.start();
-    Graph G = loadGraph(getPath(graphName));
-    dl.stop();
+    printHeaderCSV(out);
 
-    cout << "Graph name: " << graphName << endl;
-    cout << "Max degree: " << G.getMaxDegree() << endl;
+    for(auto& path : paths) {
+        std::string graphName = std::filesystem::path(path).filename().string();
+        DurationLogger dl{ "Loading " + graphName };
+        dl.start();
+        Graph G = loadGraph(path);
+        auto loadTime = dl.stop();
 
-    for(auto& solver : solvers)
-        benchmarkColoring(G, solver, true);
+        auto maxDegree = G.getMaxDegree();
+        cout << "Max degree: " << maxDegree << endl;
 
+        for(auto& solver: solvers) {
+            auto[coloringTime, numColorsUsed] = benchmarkColoring(G, solver, true);
+            printStatsCSV(out, graphName, G, maxDegree, solver->name(), solver->getNumThreads(),
+                       loadTime, coloringTime, numColorsUsed);
+        }
+    }
+
+    fclose(out);
     return 0;
 }
