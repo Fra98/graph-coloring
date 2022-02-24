@@ -244,7 +244,7 @@ The results were collected with `runlim-1.10` and the memory is expressed in MB.
 | 10 | rgg_n_2_22_s0.graph | LDF            |            4 |    566.8 |
 | 11 | rgg_n_2_22_s0.graph | LDF            |            8 |    598.9 |
 
-We can see that the memory tends to grow in LDF or Jones Plassmann algorithms, while Luby always occupies almost the same memory with different number of threads.
+We can see that the memory tends to grow slightly in LDF or Jones Plassmann algorithms, while Luby always occupies almost the same memory with different number of threads.
 As expected, JonesPlassmann and LDF have very similar performances.
 
 ![](./plots/alg_vs_memory.png)
@@ -252,4 +252,7 @@ As expected, JonesPlassmann and LDF have very similar performances.
 
 # Conclusions
 
+The experimental results demonstrate that parallel algorithms like JonesPlassmann and LDF greatly improve coloring performance, compared to sequential solutions. Not only the coloring is faster but also less colors are needed on average. On the other hand Luby implementation does not bring any improvements.
+All parallel algorithms scale well with the number of threads. 
+Memory usage does not increase considerably when increasing the number of threads.
 
